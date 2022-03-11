@@ -1,0 +1,79 @@
+﻿@model IEnumerable<GestionStock.Models.Item>
+
+@{
+    ViewData["Title"] = "Index";
+    string ColorOfRow = "white";
+}
+
+<h1>Index</h1>
+@{
+    if (User.HasClaim(x => x.Type == "Administrator"))
+    {
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>
+    }
+}
+
+<form asp-action="Search">
+    <input type="text" name="searchString" />
+    <input type="submit" value="Search" />
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Marque)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Designation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reference)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+            if (item.Quantity <= 3)
+            {
+                ColorOfRow = "red";
+            }
+            else
+            {
+                ColorOfRow = "white";
+            }
+
+            <tr style="background-color:@ColorOfRow">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Marque)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Designation)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Reference)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @{
+                        if (User.HasClaim(x => x.Type == "Administrator"))
+                        {
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        }
+                    }
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
